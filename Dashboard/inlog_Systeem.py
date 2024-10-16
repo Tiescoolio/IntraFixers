@@ -34,36 +34,38 @@ def inloggen():
             opgeslagen_gebruiker, opgeslagen_wachtwoord = lijn.strip().split(',')
             if opgeslagen_gebruiker == gebruikersnaam and opgeslagen_wachtwoord == wachtwoord:
                 messagebox.showinfo("Succes", "Inloggen geslaagd!")
+                inlog.destroy()
                 return
     messagebox.showwarning("Fout", "Onjuiste gebruikersnaam of wachtwoord!")
 
 def gui():
-    root = tk.Tk()
-    root.title("Inlog Systeem")
-    root.geometry("300x250+600+250")
-
     global gebruikersnaam_entry
     global wachtwoord_entry
+    global inlog
 
-    root.overrideredirect(True)
+    inlog = tk.Tk()
+    inlog.title("Inlog Systeem")
+    inlog.geometry("300x250+600+250")
 
-    gebruikersnaam_label = tk.Label(root, text="Mailadres")
+    inlog.overrideredirect(True)
+
+    gebruikersnaam_label = tk.Label(inlog, text="Mailadres")
     gebruikersnaam_label.pack(pady=5)
-    gebruikersnaam_entry = tk.Entry(root)
+    gebruikersnaam_entry = tk.Entry(inlog)
     gebruikersnaam_entry.pack(pady=5)
 
-    wachtwoord_label = tk.Label(root, text="Wachtwoord")
+    wachtwoord_label = tk.Label(inlog, text="Wachtwoord")
     wachtwoord_label.pack(pady=5)
-    wachtwoord_entry = tk.Entry(root, show="*")
+    wachtwoord_entry = tk.Entry(inlog, show="*")
     wachtwoord_entry.pack(pady=5)
 
-    inlog_knop = tk.Button(root, text="Inloggen", command=inloggen)
+    inlog_knop = tk.Button(inlog, text="Inloggen", command=inloggen)
     inlog_knop.pack(pady=10)
 
-    nieuwe_gebruiker_knop = tk.Button(root, text="Nieuwe gebruiker", command=nieuwe_gebruiker)
+    nieuwe_gebruiker_knop = tk.Button(inlog, text="Nieuwe gebruiker", command=nieuwe_gebruiker)
     nieuwe_gebruiker_knop.pack(pady=10)
 
-    root.mainloop()
+    inlog.mainloop()
 
 if __name__ == "__main__":
     gui()
