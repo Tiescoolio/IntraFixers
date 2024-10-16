@@ -1,0 +1,69 @@
+import tkinter as tk
+from tkinter import messagebox
+
+def nieuwe_gebruiker():
+    gebruikersnaam = gebruikersnaam_entry.get()
+    wachtwoord = wachtwoord_entry.get()
+
+    if not gebruikersnaam or not wachtwoord:
+        messagebox.showwarning("Fout", "Vul zowel gebruikersnaam als wachtwoord in!")
+        return
+
+
+    with open("inlog_Gegevens.txt", "r") as bestand:
+        lijnen = bestand.readlines()
+        for lijn in lijnen:
+            opgeslagen_gebruiker, opgeslagen_wachtwoord = lijn.strip().split(',')
+            if opgeslagen_gebruiker == gebruikersnaam:
+                messagebox.showwarning("Fout", "Gebruiker bestaat al!")
+                return
+
+    with open("inlog_Gegevens.txt", "a") as file:
+        file.write(f"{gebruikersnaam},{wachtwoord}\n")
+    messagebox.showinfo("Succes", "Gebruiker aangemaakt!")
+    gebruikersnaam_entry.delete(0, tk.END)
+    wachtwoord_entry.delete(0, tk.END)
+
+def inloggen():
+    gebruikersnaam = gebruikersnaam_entry.get()
+    wachtwoord = wachtwoord_entry.get()
+
+    with open("inlog_Gegevens.txt", "r") as file:
+        lijnen = file.readlines()
+        for lijn in lijnen:
+            opgeslagen_gebruiker, opgeslagen_wachtwoord = lijn.strip().split(',')
+            if opgeslagen_gebruiker == gebruikersnaam and opgeslagen_wachtwoord == wachtwoord:
+                messagebox.showinfo("Succes", "Inloggen geslaagd!")
+                return
+    messagebox.showwarning("Fout", "Onjuiste gebruikersnaam of wachtwoord!")
+
+def gui():
+    root = tk.Tk()
+    root.title("Inlog Systeem")
+    root.geometry("300x250+600+250")
+
+    global gebruikersnaam_entry
+    global wachtwoord_entry
+
+    root.overrideredirect(True)
+
+    gebruikersnaam_label = tk.Label(root, text="Mailadres")
+    gebruikersnaam_label.pack(pady=5)
+    gebruikersnaam_entry = tk.Entry(root)
+    gebruikersnaam_entry.pack(pady=5)
+
+    wachtwoord_label = tk.Label(root, text="Wachtwoord")
+    wachtwoord_label.pack(pady=5)
+    wachtwoord_entry = tk.Entry(root, show="*")
+    wachtwoord_entry.pack(pady=5)
+
+    inlog_knop = tk.Button(root, text="Inloggen", command=inloggen)
+    inlog_knop.pack(pady=10)
+
+    nieuwe_gebruiker_knop = tk.Button(root, text="Nieuwe gebruiker", command=nieuwe_gebruiker)
+    nieuwe_gebruiker_knop.pack(pady=10)
+
+    root.mainloop()
+
+if __name__ == "__main__":
+    gui()
