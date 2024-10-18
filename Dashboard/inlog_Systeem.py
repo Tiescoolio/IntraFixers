@@ -27,6 +27,7 @@ def gui():
 
     inlog_knop = tk.Button(inlog, text="Inloggen", command=inloggen)
     inlog_knop.pack(pady=10)
+    inlog.bind('<Return>', lambda event: inloggen())
 
     nieuwe_gebruiker_knop = tk.Button(inlog, text="Nieuwe gebruiker", command=nieuwe_gebruiker)
     nieuwe_gebruiker_knop.pack(pady=10)
