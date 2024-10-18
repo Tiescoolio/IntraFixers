@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-
+from dashboard_Gui import gui as dashboard
 def gui():
     global gebruikersnaam_entry
     global wachtwoord_entry
@@ -9,6 +9,9 @@ def gui():
     inlog = tk.Tk()
     inlog.title("Inlog Systeem")
     inlog.geometry("300x250+600+250")
+
+    icon = tk.PhotoImage(file="proRail_Logo.png")
+    inlog.iconphoto(False, icon)
 
     inlog.overrideredirect(True)
 
@@ -64,6 +67,7 @@ def inloggen():
             if opgeslagen_gebruiker == gebruikersnaam and opgeslagen_wachtwoord == wachtwoord:
                 messagebox.showinfo("Welkom", f"Inloggen geslaagd, Welkom {opgeslagen_gebruiker}")
                 inlog.destroy()
+                dashboard()
                 return
     messagebox.showwarning("Fout", "Onjuiste gebruikersnaam of wachtwoord!")
 
