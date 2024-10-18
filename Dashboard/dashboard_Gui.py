@@ -66,8 +66,18 @@ def update_storingen():
         lijnen = bestand.readlines()
         laatste_drie = lijnen[-3:] if len(lijnen) > 3 else lijnen
         storing_text = '\n'.join(regel.strip() for regel in laatste_drie)
-        storing_text, storing_tijd = storing_text.split("|")
-        storingen.config(text=f"{storing_text}\n{storing_tijd}")
+        storing_weergave_text = ""
+        print(f"storing_text = {storing_text}")
+        if storing_text:
+            regels = storing_text.split("\n")
+            print(f"regels = {regels}")
+            for regel in regels:
+                storing_informatie, storing_tijd = regel.split("|", 1)
+                storing_weergave_text += f"{storing_informatie.strip()}\n{storing_tijd.strip()}\n\n\n"
+                print(f"storing_weergave_text = {storing_weergave_text}")
+        else:
+            storing_weergave_text = "Er zijn momenteel geen storingen"
+    storingen.config(text=storing_weergave_text.strip())
     storingen.after(5000, update_storingen)
 
 

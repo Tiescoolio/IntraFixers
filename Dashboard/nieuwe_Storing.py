@@ -22,55 +22,56 @@ def storing_opgeven():
 
 def nieuwe_storing():
     opgeven_storing.destroy()
-    global nieuwe_storing
+    global nieuwe_storing_window
 
-    nieuwe_storing = tk.Toplevel()
-    nieuwe_storing.title("Nieuwe Storing invoeren")
+    nieuwe_storing_window = tk.Toplevel()
+    nieuwe_storing_window.title("Nieuwe Storing invoeren")
     icon = tk.PhotoImage(file="proRail_Logo.png")
-    nieuwe_storing.iconphoto(False, icon)
+    nieuwe_storing_window.iconphoto(False, icon)
 
-    storing_label = tk.Label(nieuwe_storing, text="Storing:")
+    storing_label = tk.Label(nieuwe_storing_window, text="Storing:")
     storing_label.pack(pady=5)
 
-    storing_entry = tk.Entry(nieuwe_storing)
+    storing_entry = tk.Entry(nieuwe_storing_window)
     storing_entry.pack(pady=5)
 
-    save_button = tk.Button(nieuwe_storing, text="Opslaan", command=lambda:nieuwe_storing_opslaan(storing_entry.get()))
+    save_button = tk.Button(nieuwe_storing_window, text="Opslaan", command=lambda:nieuwe_storing_opslaan(storing_entry.get()))
     save_button.pack(pady=20)
-    nieuwe_storing.bind('<Return>', lambda event: nieuwe_storing_opslaan(storing_entry.get()))
-    nieuwe_storing.mainloop()
+    nieuwe_storing_window.bind('<Return>', lambda event: nieuwe_storing_opslaan(storing_entry.get()))
+    nieuwe_storing_window.mainloop()
 
 def storing_aanvullen():
     opgeven_storing.destroy()
-    storing_aanvullen = tk.Toplevel()
+    global storing_aanvullen_window
+    storing_aanvullen_window = tk.Toplevel()
 
-    storing_aanvullen.title("Vul een storing aan")
+    storing_aanvullen_window.title("Vul een storing aan")
     icon = tk.PhotoImage(file="proRail_Logo.png")
-    storing_aanvullen.iconphoto(False, icon)
+    storing_aanvullen_window.iconphoto(False, icon)
 
-    storing_label = tk.Label(storing_aanvullen, text="Storing:")
+    storing_label = tk.Label(storing_aanvullen_window, text="Storing:")
     storing_label.pack(pady=5)
 
-    storing_entry = tk.Entry(storing_aanvullen)
+    storing_entry = tk.Entry(storing_aanvullen_window)
     storing_entry.pack(pady=5)
 
-    save_button = tk.Button(storing_aanvullen, text="Opslaan", command=lambda:storing_aanvullen_opslaan(storing_entry.get()))
+    save_button = tk.Button(storing_aanvullen_window, text="Opslaan", command=lambda:storing_aanvullen_opslaan(storing_entry.get()))
     save_button.pack(pady=20)
-    storing_aanvullen.bind('<Return>', lambda event: storing_aanvullen_opslaan(storing_entry.get()))
-    storing_aanvullen.mainloop()
+    storing_aanvullen_window.bind('<Return>', lambda event: storing_aanvullen_opslaan(storing_entry.get()))
+    storing_aanvullen_window.mainloop()
 
 def nieuwe_storing_opslaan(storing_informatie):
     with open("storing_Gegevens.txt", "a") as file:
-        datum =datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        datum = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         file.write(f"{storing_informatie}|{datum}\n")
     messagebox.showinfo("Succes", "Storing aangemaakt!")
-    nieuwe_storing.destroy()
+    nieuwe_storing_window.destroy()
     # nog aanmaken dat er een entry is voor elke kolom die we gebruiken
 
 def storing_aanvullen_opslaan(storing_informatie):
     with open("storing_Gegevens.txt", "a") as file:
-        datum =datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        datum = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         file.write(f"{storing_informatie}|{datum}\n")
     messagebox.showinfo("Succes", "Storing aangevuld!")
-    storing_aanvullen.destroy()
+    storing_aanvullen_window.destroy()
     # nog functie aanmaken dat zorgt dat de storing bijgevuld word ipv dat er een nieuwe storing word aangemaakt
