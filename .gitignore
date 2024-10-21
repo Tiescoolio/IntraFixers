@@ -1,6 +1,6 @@
 source/
 cleaned_storing_data.csv
 .ipynb_checkpoints
-inlog_systeem.txt
-storing_Gegevens.txt
-storing_Gegevens_3_features.csv
+Dashboard/inlog_Gegevens.txt
+Dashboard/storing_Gegevens.txt
+Dashboard/storing_Gegevens_3_features.csv
