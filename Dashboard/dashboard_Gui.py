@@ -1,7 +1,7 @@
 import requests
 import tkinter as tk
 import datetime
-from nieuwe_Storing import storing_opgeven
+from nieuwe_Storing_3_features import nieuwe_storing as ns
 
 def gui():
     global tijd_label
@@ -28,7 +28,7 @@ def gui():
                                       font=("Helvetica", 16, "bold italic"))
     weer_informatie.pack(pady=20)
 
-    nieuwe_storing = tk.Button(window, text="Storing Invoeren", command=storing_opgeven)
+    nieuwe_storing = tk.Button(window, text="Storing Invoeren", command=ns)
     nieuwe_storing.pack(pady=20)
 
     update_tijd()
@@ -67,14 +67,11 @@ def update_storingen():
         laatste_drie = lijnen[-3:] if len(lijnen) > 3 else lijnen
         storing_text = '\n'.join(regel.strip() for regel in laatste_drie)
         storing_weergave_text = ""
-        print(f"storing_text = {storing_text}")
         if storing_text:
             regels = storing_text.split("\n")
-            print(f"regels = {regels}")
             for regel in regels:
                 storing_informatie, storing_tijd = regel.split("|", 1)
                 storing_weergave_text += f"{storing_informatie.strip()}\n{storing_tijd.strip()}\n\n\n"
-                print(f"storing_weergave_text = {storing_weergave_text}")
         else:
             storing_weergave_text = "Er zijn momenteel geen storingen"
     storingen.config(text=storing_weergave_text.strip())
