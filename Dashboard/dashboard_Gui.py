@@ -2,6 +2,7 @@ import requests
 import tkinter as tk
 import datetime
 from nieuwe_Storing_3_features import nieuwe_storing as ns
+import pandas as pd
 
 def gui():
     global tijd_label
@@ -62,18 +63,17 @@ def update_weerinformatie():
     weer_informatie.after(60000, update_weerinformatie)
 
 def update_storingen():
-    with open("storing_Gegevens.txt", "r") as bestand:
-        lijnen = bestand.readlines()
-        laatste_drie = lijnen[-3:] if len(lijnen) > 3 else lijnen
-        storing_text = '\n'.join(regel.strip() for regel in laatste_drie)
-        storing_weergave_text = ""
-        if storing_text:
-            regels = storing_text.split("\n")
-            for regel in regels:
-                storing_informatie, storing_tijd = regel.split("|", 1)
-                storing_weergave_text += f"{storing_informatie.strip()}\n{storing_tijd.strip()}\n\n\n"
-        else:
-            storing_weergave_text = "Er zijn momenteel geen storingen"
+    df = pd.read_csv("storing_Gegevens_3_features.csv", sep=";")
+    weergeven_storingen = df.tail(3)
+    storing_weergave_text = ""
+    if not weergeven_storingen.empty:
+        for _, storing in weergeven_storingen.iterrows():
+            storing_weergave_text += f"Storing: {storing["storing_beschrijving"]}\n"
+            storing_weergave_text += f"Prioriteitscode: {storing["stm_prioriteit"]}\n"
+            storing_weergave_text += f"Meldtijd:  {storing["stm_sap_meldtijd"]}\n"
+            storing_weergave_text += f"Tijd Schatting: {storing["status_storing"]} minuten\n\n"
+    else:
+        storing_weergave_text = "Er zijn momenteel geen storingen om te tonen"
     storingen.config(text=storing_weergave_text.strip())
     storingen.after(5000, update_storingen)
 
