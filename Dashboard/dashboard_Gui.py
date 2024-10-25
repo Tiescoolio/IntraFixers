@@ -68,10 +68,10 @@ def update_storingen():
     storing_weergave_text = ""
     if not weergeven_storingen.empty:
         for _, storing in weergeven_storingen.iterrows():
-            storing_weergave_text += f"Storing: {storing["storing_beschrijving"]}\n"
-            storing_weergave_text += f"Prioriteitscode: {storing["stm_prioriteit"]}\n"
-            storing_weergave_text += f"Meldtijd:  {storing["stm_sap_meldtijd"]}\n"
-            storing_weergave_text += f"Tijd Schatting: {storing["status_storing"]} minuten\n\n"
+            storing_weergave_text += f"Storing: {storing['storing_beschrijving']}\n"
+            storing_weergave_text += f"Prioriteitscode: {storing['stm_prioriteit']}\n"
+            storing_weergave_text += f"Meldtijd:  {storing['stm_sap_meldtijd']}\n"
+            storing_weergave_text += f"Tijd Schatting: {storing['status_storing']} minuten\n\n"
     else:
         storing_weergave_text = "Er zijn momenteel geen storingen om te tonen"
     storingen.config(text=storing_weergave_text.strip())
