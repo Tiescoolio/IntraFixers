@@ -1,4 +1,4 @@
-from inlog_Systeem import gui
+from dashboard_Gui import gui
 
 
 def main():

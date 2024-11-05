@@ -2,72 +2,75 @@ import tkinter as tk
 from tkinter import messagebox
 from dashboard_Gui import gui as dashboard
 def gui():
-    global gebruikersnaam_entry
-    global wachtwoord_entry
-    global inlog
+    global username_entry
+    global password_entry
+    global login_window
 
-    inlog = tk.Tk()
-    inlog.title("Inlog Systeem")
-    inlog.geometry("300x250+600+250")
+    login_window = tk.Tk()
+    login_window.title("Inlog Systeem")
+    login_window.configure(background="#f7d417")
+    login_window.geometry("300x250+600+250")
 
     icon = tk.PhotoImage(file="proRail_Logo.png")
-    inlog.iconphoto(False, icon)
+    login_window.iconphoto(False, icon)
 
-    inlog.overrideredirect(True)
+    login_window.overrideredirect(True)
 
-    gebruikersnaam_label = tk.Label(inlog, text="Gebruikersnaam")
-    gebruikersnaam_label.pack(pady=5)
-    gebruikersnaam_entry = tk.Entry(inlog)
-    gebruikersnaam_entry.pack(pady=5)
+    username_label = tk.Label(login_window, text="Gebruikersnaam", background="#f7d417", foreground="#003373",
+                              font=("Helvetica", 16, "bold italic"))
+    username_label.pack(pady=5)
+    username_entry = tk.Entry(login_window)
+    username_entry.pack(pady=5)
 
-    wachtwoord_label = tk.Label(inlog, text="Wachtwoord")
-    wachtwoord_label.pack(pady=5)
-    wachtwoord_entry = tk.Entry(inlog, show="*")
-    wachtwoord_entry.pack(pady=5)
+    password_label = tk.Label(login_window, text="Wachtwoord", background="#f7d417", foreground="#003373",
+                              font=("Helvetica", 16, "bold italic"))
+    password_label.pack(pady=5)
+    password_entry = tk.Entry(login_window, show="*")
+    password_entry.pack(pady=5)
 
-    inlog_knop = tk.Button(inlog, text="Inloggen", command=inloggen)
-    inlog_knop.pack(pady=10)
-    inlog.bind('<Return>', lambda event: inloggen())
+    login_button = tk.Button(login_window, text="Inloggen", command=login)
+    login_button.pack(pady=10)
+    login_window.bind('<Return>', lambda event: login())
 
-    nieuwe_gebruiker_knop = tk.Button(inlog, text="Nieuwe gebruiker", command=nieuwe_gebruiker)
-    nieuwe_gebruiker_knop.pack(pady=10)
+    new_user_button = tk.Button(login_window, text="Nieuwe gebruiker", command=new_user)
+    new_user_button.pack(pady=10)
 
-    inlog.mainloop()
+    login_window.mainloop()
 
-def nieuwe_gebruiker():
-    gebruikersnaam = gebruikersnaam_entry.get()
-    wachtwoord = wachtwoord_entry.get()
+def new_user():
+    username = username_entry.get()
+    password = password_entry.get()
 
-    if not gebruikersnaam or not wachtwoord:
+    if not username or not password:
         messagebox.showwarning("Fout", "Vul zowel gebruikersnaam als wachtwoord in!")
         return
 
 
-    with open("inlog_Gegevens.txt", "r") as bestand:
-        lijnen = bestand.readlines()
-        for lijn in lijnen:
-            opgeslagen_gebruiker, opgeslagen_wachtwoord = lijn.strip().split(',')
-            if opgeslagen_gebruiker == gebruikersnaam:
+    with open("inlog_Gegevens.txt", "r") as file:
+        lines = file.readlines()
+        for line in lines:
+            saved_user, saved_password = line.strip().split(',')
+            if saved_user == username:
                 messagebox.showwarning("Fout", "Gebruiker bestaat al!")
                 return
 
     with open("inlog_Gegevens.txt", "a") as file:
-        file.write(f"{gebruikersnaam},{wachtwoord}\n")
+        file.write(f"{username},{password}\n")
     messagebox.showinfo("Succes", "Gebruiker aangemaakt!")
-    gebruikersnaam_entry.delete(0, tk.END)
-    wachtwoord_entry.delete(0, tk.END)
+    username_entry.delete(0, tk.END)
+    password_entry.delete(0, tk.END)
 
-def inloggen():
-    gebruikersnaam = gebruikersnaam_entry.get()
-    wachtwoord = wachtwoord_entry.get()
+def login():
+    username = username_entry.get()
+    password = password_entry.get()
 
     with open("inlog_Gegevens.txt", "r") as file:
-        lijnen = file.readlines()
-        for lijn in lijnen:
-            opgeslagen_gebruiker, opgeslagen_wachtwoord = lijn.strip().split(',')
-            if opgeslagen_gebruiker == gebruikersnaam and opgeslagen_wachtwoord == wachtwoord:
-                messagebox.showinfo("Welkom", f"Inloggen geslaagd, Welkom {opgeslagen_gebruiker}")
-                inlog.destroy()
+        lines = file.readlines()
+        for line in lines:
+            saved_user, saved_password = line.strip().split(',')
+            if saved_user == username and saved_password == password:
+                messagebox.showinfo("Welkom", f"Inloggen geslaagd, Welkom {saved_user}")
+                login_window.destroy()
                 dashboard()
                 return
     messagebox.showwarning("Fout", "Onjuiste gebruikersnaam of wachtwoord!")
