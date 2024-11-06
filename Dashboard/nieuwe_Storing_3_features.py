@@ -77,7 +77,12 @@ def update_csv_with_prediction(disruption_input, prediction_result):
 
 
 def run_base_model(storing_input):
-    with open("../base_model.pkl", "rb") as file:
-        base_model = pickle.load(file)
-    prediction_result = base_model.predict(storing_input)
-    update_csv_with_prediction(storing_input, prediction_result)
+    with open("../model.pkl", "rb") as file:
+        loaded_model = pickle.load(file)
+    model = loaded_model.get("model")
+    rmse = loaded_model.get("rmse")
+    prediction_result = model.predict(storing_input)
+    min_estimate = prediction_result - (rmse/2)
+    max_estimate = prediction_result + (rmse/2)
+    time_estimate = f"{min_estimate:.2f}-{max_estimate:.2f} minuten"
+    update_csv_with_prediction(storing_input, time_estimate)
