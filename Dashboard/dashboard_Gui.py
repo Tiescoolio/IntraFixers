@@ -1,7 +1,7 @@
 import requests
 import tkinter as tk
 import datetime
-from nieuwe_Storing_3_features import new_disruption as ns
+from nieuwe_Storing import new_disruption as ns
 import pandas as pd
 
 
@@ -14,7 +14,7 @@ def gui():
     dashboard_window = tk.Tk()
     dashboard_window.title("Dashboard")
     dashboard_window.geometry("800x600")
-    dashboard_window.configure(background="#f7d417")
+    dashboard_window.configure(background="#f0f0f0")
     dashboard_window.attributes('-fullscreen', True)
 
     # Icoon aanmaken voor de window
@@ -22,22 +22,24 @@ def gui():
     dashboard_window.iconphoto(False, icon)
 
     # Label aanmaken voor de storingen
-    disruptions = tk.Label(dashboard_window, text="", background="#f7d417", foreground="#003373",
-                           font=("Helvetica", 16, "bold italic"))
+    disruptions = tk.Label(dashboard_window, text="", background="#f0f0f0", foreground="#003373",
+                              font=("Helvetica", 16, "bold italic"))
     disruptions.pack(pady=60)
 
     # Label aanmaken voor de tijd
-    time_label = tk.Label(dashboard_window, background="#f7d417", foreground="#003373",
-                          font=("Helvetica", 20, "bold italic"))
+    time_label = tk.Label(dashboard_window, background="#f0f0f0", foreground="#003373",
+                              font=("Helvetica", 16, "bold italic"))
     time_label.pack(pady=20)
 
     # Label aanmaken voor het weer
-    weather_label = tk.Label(dashboard_window, text="", background="#f7d417", foreground="#003373",
-                             font=("Helvetica", 16, "bold italic"))
+    weather_label = tk.Label(dashboard_window, text="", background="#f0f0f0", foreground="#003373",
+                              font=("Helvetica", 16, "bold italic"))
     weather_label.pack(pady=20)
 
     # Knop aanmaken om een storing in te voeren
-    new_disruption = tk.Button(dashboard_window, text="Storing Invoeren", command=ns)
+    new_disruption = tk.Button(dashboard_window, text="Storing Invoeren", command=ns,
+                               background="#CC0033", foreground="#FFFFFF",
+                               activebackground="#880000", font=("Helvetica", 16, "bold italic"))
     new_disruption.pack(pady=20)
 
     # Update de tijd, weer en storing labels herhalend
@@ -77,7 +79,7 @@ def update_weatherinformation():
 
 def update_disruptions():
     # Update de storingen label om de 5 seconden met de laatste 3 storingen uit het bestand
-    df = pd.read_csv("storing_Gegevens_3_features.csv", sep=";")
+    df = pd.read_csv("storing_Gegevens.csv", sep=";")
     display_disruptions = df.tail(3)
     disruption_display_text = ""
     if not display_disruptions.empty:
@@ -88,7 +90,7 @@ def update_disruptions():
                 addon = "minuten"
             disruption_display_text += f"Storing: {disruption['storing_beschrijving']}\n"
             disruption_display_text += f"Prioriteitscode: {disruption['stm_prioriteit']}\n"
-            disruption_display_text += f"Meldtijd:  {disruption['stm_sap_meldtijd']}\n"
+            disruption_display_text += f"Meldtijd: {disruption['melding_datum']}\n"
             disruption_display_text += f"Tijd Schatting: {disruption['status_storing']} {addon}\n\n"
     else:
         disruption_display_text = "Er zijn momenteel geen storingen om te tonen"
