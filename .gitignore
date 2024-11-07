@@ -2,6 +2,5 @@ source/
 cleaned_storing_data.csv
 .ipynb_checkpoints
 Dashboard/inlog_Gegevens.txt
-Dashboard/storing_Gegevens.txt
-Dashboard/storing_Gegevens_3_features.csv
+Dashboard/storing_Gegevens.csv
 sap_storing_data_hu_project.csv
