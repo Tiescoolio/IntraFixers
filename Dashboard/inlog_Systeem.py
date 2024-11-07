@@ -9,8 +9,8 @@ def gui():
     # Gegevens van de window opgeven
     login_window = tk.Tk()
     login_window.title("Inlog Systeem")
-    login_window.configure(background="#f7d417")
-    login_window.geometry("300x250+600+250")
+    login_window.configure(background="#FFFFFF")
+    login_window.geometry("300x300+600+250")
 
     # Icoon aanmaken voor de window
     icon = tk.PhotoImage(file="proRail_Logo.png")
@@ -20,26 +20,35 @@ def gui():
     login_window.overrideredirect(True)
 
     # Label en entry aanmaken waar de gebruikersnaam ingevoerd kan worden
-    username_label = tk.Label(login_window, text="Gebruikersnaam", background="#f7d417", foreground="#003373",
+    username_label = tk.Label(login_window, text="Gebruikersnaam", background="#FFFFFF", foreground="#003373",
                               font=("Helvetica", 16, "bold italic"))
     username_label.pack(pady=5)
-    username_entry = tk.Entry(login_window)
+
+    username_entry = tk.Entry(login_window, font=("Helvetica", 16, "bold italic"), borderwidth=0, highlightthickness=0)
     username_entry.pack(pady=5)
+    username_line = tk.Frame(login_window, height=2, width=200, bg="#444444")
+    username_line.pack()
 
     # Label en entry aanmaken waar het wachtwoord ingevoerd kan worden
-    password_label = tk.Label(login_window, text="Wachtwoord", background="#f7d417", foreground="#003373",
+    password_label = tk.Label(login_window, text="Wachtwoord", background="#FFFFFF", foreground="#003373",
                               font=("Helvetica", 16, "bold italic"))
     password_label.pack(pady=5)
-    password_entry = tk.Entry(login_window, show="*")
+    password_entry = tk.Entry(login_window, show="*", font=("Helvetica", 16, "bold italic"), borderwidth=0, highlightthickness=0)
     password_entry.pack(pady=5)
+    password_line = tk.Frame(login_window, height=2, width=200, bg="#444444")
+    password_line.pack()
 
     # Knop aanmaken voor het inloggen, en deze command ook verbinden met de "enter" toets
-    login_button = tk.Button(login_window, text="Inloggen", command=login)
+    login_button = tk.Button(login_window, text="Inloggen", command=login, background="#CC0033",
+                             foreground="#FFFFFF", activebackground="#880000",
+                             font=("Helvetica", 16, "bold italic"))
     login_button.pack(pady=10)
     login_window.bind('<Return>', lambda event: login())
 
     # Knop aanmaken voor het aanmaken van een nieuwe gebruiker
-    new_user_button = tk.Button(login_window, text="Nieuwe gebruiker", command=new_user)
+    new_user_button = tk.Button(login_window, text="Nieuwe gebruiker", command=new_user,
+                                background="#CC0033", foreground="#FFFFFF", activebackground="#880000",
+                                font=("Helvetica", 16, "bold italic"))
     new_user_button.pack(pady=10)
 
     login_window.mainloop()
