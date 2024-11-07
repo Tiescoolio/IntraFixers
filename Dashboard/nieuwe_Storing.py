@@ -6,6 +6,7 @@ import pandas as pd
 from threading import Thread
 import csv
 import datetime
+from tkcalendar import Calendar
 
 
 def new_disruption():
@@ -22,7 +23,6 @@ def new_disruption():
         ("Prioriteit:", "stm_prioriteit"),
         ("Oorzaak Code:", "stm_oorz_code"),
         ("Geografische locatie melding:", "stm_geo_mld"),
-        ("Aangiftedatum:", "stm_aanngeb_dd"),
         ("Oorzaak Groep:", "stm_oorz_groep"),
         ("Contractgebied aannnemer:", "stm_contractgeb_gst"),
         ("Techniekveld melding:", "stm_techn_gst"),
@@ -36,25 +36,39 @@ def new_disruption():
     # Dynamisch labels en invoervelden aanmaken
     for label_text, entry_key in info:
         label = tk.Label(new_disruption_window, text=label_text, background="#FFFFFF", foreground="#003373",
-                         font=("Helvetica", 16, "bold italic"))
+                         font=("Helvetica", 14, "bold italic"))
         label.pack(pady=5)
 
-        entry = tk.Entry(new_disruption_window, font=("Helvetica", 16, "bold italic"), borderwidth=0,
+        entry = tk.Entry(new_disruption_window, font=("Helvetica", 14, "bold italic"), borderwidth=0,
                          highlightthickness=0)
         entry.pack(pady=5)
 
         entries[entry_key] = entry
 
-    save_button = tk.Button(new_disruption_window, text="Opslaan", command=lambda: save_new_disruption(entries),
+    declaration_date_label = tk.Label(new_disruption_window, text="Aangifte datum:", background="#FFFFFF",
+                                      foreground="#003373", font=("Helvetica", 14, "bold italic"))
+    declaration_date_label.pack(pady=5)
+
+    def select_date():
+        global declaration_date_seconds
+        # Roep open_calendar aan om de tijd in seconden te krijgen
+        declaration_date_seconds = open_calendar()
+        print(declaration_date_seconds)
+
+    calendar_button = tk.Button(new_disruption_window, text="Selecteer Datum en Tijd",
+                                command=select_date, background="#003373",
+                                foreground="#FFFFFF", font=("Helvetica", 14, "bold italic"))
+    calendar_button.pack(pady=10)
+    save_button = tk.Button(new_disruption_window, text="Opslaan", command=lambda: save_new_disruption(entries, declaration_date_seconds),
                             background="#CC0033", foreground="#FFFFFF", activebackground="#880000",
-                            font=("Helvetica", 16, "bold italic"))
+                            font=("Helvetica", 14, "bold italic"))
     save_button.pack(pady=20)
-    new_disruption_window.bind('<Return>', lambda event: save_new_disruption(entries))
+    new_disruption_window.bind('<Return>', lambda event: save_new_disruption(entries, declaration_date_seconds))
 
     new_disruption_window.mainloop()
 
 
-def save_new_disruption(disruption_information):
+def save_new_disruption(disruption_information, declaration_date):
     disruption_information_keys = {key: entry.get() for key, entry in disruption_information.items()}
     oorz_groep_mapping = {
         "ONR-DERD": 0,
@@ -74,6 +88,7 @@ def save_new_disruption(disruption_information):
     disruption_information["stm_sap_meld_ddt"] = int(time.time())
     disruption_information["melding_datum"] = tijd.strftime("%Y-%m-%d %H:%M:%S")
     disruption_information["status_storing"] = "in proces"
+    disruption_information["stm_aanngeb_dd"] = declaration_date
 
     csv_data = {
         "storing_beschrijving": disruption_information["storing_beschrijving"].get(),
@@ -81,7 +96,7 @@ def save_new_disruption(disruption_information):
         "stm_oorz_code": disruption_information["stm_oorz_code"].get(),
         "stm_sap_meld_ddt": disruption_information["stm_sap_meld_ddt"],
         "stm_geo_mld": disruption_information["stm_geo_mld"].get(),
-        "stm_aanngeb_dd": disruption_information["stm_aanngeb_dd"].get(),
+        "stm_aanngeb_dd": disruption_information["stm_aanngeb_dd"],
         "stm_oorz_groep": disruption_information["stm_oorz_groep"],
         "stm_contractgeb_gst": disruption_information["stm_contractgeb_gst"].get(),
         "stm_techn_gst": disruption_information["stm_techn_gst"].get(),
@@ -149,3 +164,56 @@ def run_base_model(disruption_input):
     max_estimate = prediction_result + (rmse / 2)
     time_estimate = f"{int(min_estimate)}-{int(max_estimate)}"
     update_csv_with_prediction(input_data, time_estimate)
+
+
+def open_calendar():
+    # Nieuwe window om de kalender te tonen
+    calendar_window = tk.Toplevel()
+    calendar_window.title("Selecteer Datum en Tijd")
+    calendar_window.geometry("+200+100")
+
+    # Kalender widget
+    cal = Calendar(calendar_window, selectmode="day", year=2023, month=11, day=7)
+    cal.pack(pady=10)
+
+    # Tijd invoer voor uur en minuten
+    time_frame = tk.Frame(calendar_window)
+    time_frame.pack(pady=10)
+
+    hour_var = tk.IntVar(value=0)
+    minute_var = tk.IntVar(value=0)
+
+    hour_label = tk.Label(time_frame, text="Uur:")
+    hour_label.grid(row=0, column=0)
+    hour_entry = tk.Spinbox(time_frame, from_=0, to=23, textvariable=hour_var, width=5)
+    hour_entry.grid(row=0, column=1)
+
+    minute_label = tk.Label(time_frame, text="Minuten:")
+    minute_label.grid(row=0, column=2)
+    minute_entry = tk.Spinbox(time_frame, from_=0, to=59, textvariable=minute_var, width=5)
+    minute_entry.grid(row=0, column=3)
+
+    # Variabele om de gekozen datum in seconden op te slaan
+    selected_timestamp = tk.IntVar(value=0)
+
+    def save_date_time():
+        # Datum en tijd uit de widgets halen
+        selected_date = cal.get_date()
+        selected_hour = hour_var.get()
+        selected_minute = minute_var.get()
+
+        # Omzetten naar datetime object
+        date_time_str = f"{selected_date} {selected_hour}:{selected_minute}"
+        date_time_obj = datetime.datetime.strptime(date_time_str, "%m/%d/%y %H:%M")
+
+        # Omzetten naar seconden sinds 1970
+        selected_timestamp.set(int(date_time_obj.timestamp()))
+        calendar_window.destroy()
+
+    # Opslaan knop om de datum en tijd in entries te zetten
+    save_button = tk.Button(calendar_window, text="Opslaan", command=save_date_time)
+    save_button.pack(pady=10)
+
+    # Wacht totdat het kalender venster is gesloten, dan geef de timestamp terug
+    calendar_window.wait_window()
+    return selected_timestamp.get()

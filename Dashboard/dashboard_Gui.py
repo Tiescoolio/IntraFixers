@@ -90,8 +90,8 @@ def update_disruptions():
                 addon = "minuten"
             disruption_display_text += f"Storing: {disruption['storing_beschrijving']}\n"
             disruption_display_text += f"Prioriteitscode: {disruption['stm_prioriteit']}\n"
-            disruption_display_text += f"Meldtijd: {disruption['melding_datum']}\n"
-            disruption_display_text += f"Tijd Schatting: {disruption['status_storing']} {addon}\n\n"
+            disruption_display_text += f"Aangemeld op: {disruption['melding_datum']}\n"
+            disruption_display_text += f"Verwachte storingsduur: {disruption['status_storing']} {addon}\n\n"
     else:
         disruption_display_text = "Er zijn momenteel geen storingen om te tonen"
     disruptions.config(text=disruption_display_text.strip())
