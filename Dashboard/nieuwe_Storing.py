@@ -105,7 +105,6 @@ def save_new_disruption(disruption_information):
 
 
 def update_csv_with_prediction(disruption_input, prediction_result):
-    time.sleep(10)
     df = pd.read_csv("storing_Gegevens.csv", sep=";")
     disruption_criteria = (df["stm_sap_meld_ddt"] == disruption_input["stm_sap_meld_ddt"])
     wanted_disruption = df[disruption_criteria]
